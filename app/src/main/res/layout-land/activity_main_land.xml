@@ -11,17 +11,18 @@
         android:weightSum="7"
         tools:ignore="MissingDefaultResource">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="4"
-            android:fontFamily="@font/sniglet"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="4"
+        android:fontFamily="@font/sniglet"
 
-            android:gravity="right|top"
-            android:textSize="36sp"
-            tools:visibility="visible" />
+        android:gravity="right|top"
+        android:textSize="36sp"
+        tools:visibility="visible" />
+
 
 
         <TableRow
