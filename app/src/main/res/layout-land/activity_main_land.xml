@@ -1,240 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom"
-        android:orientation="vertical"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical"
 
-        android:weightSum="7"
-        tools:ignore="MissingDefaultResource">
+    android:weightSum="6.5"
+    tools:ignore="MissingDefaultResource">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="5dp"
         android:layout_weight="4"
-        android:fontFamily="@font/sniglet"
+        app:autoSizeTextType="uniform"
 
+        android:fontFamily="@font/sniglet"
         android:gravity="right|top"
+
         android:textSize="36sp"
+        app:autoSizeMaxTextSize="36sp"
+
+
+        app:autoSizeMinTextSize="6sp"
         tools:visibility="visible" />
 
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
 
-        <TableRow
+        <Button
+            android:id="@+id/C"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="delete_all"
+            android:text="C" />
 
-            <Button
-                android:id="@+id/C"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="delete_all"
-                android:text="C" />
-
-            <Button
-                android:id="@+id/auf"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:onClick="Klammer_auf"
-                android:text="("
-                android:visibility="visible" />
-
-            <Button
-                android:id="@+id/zu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:onClick="Klammer_zu"
-                android:text=")"
-                android:visibility="visible" />
-
-            <Button
-                android:id="@+id/del"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="delete"
-                android:text="DEL" />
-        </TableRow>
-
-        <TableRow
+        <Button
+            android:id="@+id/auf"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.25"
+            android:onClick="Klammer_auf"
+            android:text="("
+            android:visibility="visible" />
 
-            <Button
-                android:id="@+id/seven"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_seven"
-                android:text="7" />
-
-            <Button
-                android:id="@+id/eight"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_eight"
-                android:text="8" />
-
-            <Button
-                android:id="@+id/nine"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_nine"
-                android:text="9" />
-
-            <Button
-                android:id="@+id/mul"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="multiply"
-                android:text="x" />
-        </TableRow>
-
-        <TableRow
+        <Button
+            android:id="@+id/zu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.25"
+            android:onClick="Klammer_zu"
+            android:text=")"
+            android:visibility="visible" />
 
-            <Button
-                android:id="@+id/four"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_four"
-                android:text="4" />
-
-            <Button
-                android:id="@+id/five"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_five"
-                android:text="5" />
-
-            <Button
-                android:id="@+id/six"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_six"
-                android:text="6" />
-
-            <Button
-                android:id="@+id/add"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="plus"
-                android:text="+" />
-        </TableRow>
-
-        <TableRow
+        <Button
+            android:id="@+id/del"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="delete"
+            android:text="DEL" />
+    </TableRow>
 
-            <Button
-                android:id="@+id/one"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_one"
-                android:text="1" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
 
-            <Button
-                android:id="@+id/two"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_two"
-                android:text="2" />
-
-            <Button
-                android:id="@+id/three"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_three"
-                android:text="3" />
-
-            <Button
-                android:id="@+id/sub"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="minus"
-                android:text="-" />
-        </TableRow>
-
-        <TableRow
+        <Button
+            android:id="@+id/seven"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_seven"
+            android:text="7" />
 
-            <Button
-                android:id="@+id/zero"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="click_zero"
-                android:text="0" />
+        <Button
+            android:id="@+id/eight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_eight"
+            android:text="8" />
 
-            <Button
-                android:id="@+id/comma"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="Comma"
-                android:text="," />
+        <Button
+            android:id="@+id/nine"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_nine"
+            android:text="9" />
 
-            <Button
-                android:id="@+id/div"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="divide"
-                android:text="/" />
+        <Button
+            android:id="@+id/mul"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="multiply"
+            android:text="x" />
+    </TableRow>
 
-            <Button
-                android:id="@+id/result"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:fontFamily="@font/sniglet"
-                android:onClick="result"
-                android:text="=" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
 
-        </TableRow>
+        <Button
+            android:id="@+id/four"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_four"
+            android:text="4" />
 
-    </TableLayout>
+        <Button
+            android:id="@+id/five"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_five"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/six"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_six"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="plus"
+            android:text="+" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
+
+        <Button
+            android:id="@+id/one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_one"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/two"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_two"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/three"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_three"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/sub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="minus"
+            android:text="-" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
+
+        <Button
+            android:id="@+id/zero"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="click_zero"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/comma"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="Comma"
+            android:text="," />
+
+        <Button
+            android:id="@+id/div"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="divide"
+            android:text="/" />
+
+        <Button
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:fontFamily="@font/sniglet"
+            android:onClick="result"
+            android:text="=" />
+
+    </TableRow>
+
+</TableLayout>
 

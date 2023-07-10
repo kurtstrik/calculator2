@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Calculator Kotlin</string>
     <string name="digitlimit">numbers with 15 digits or less allowed</string>
