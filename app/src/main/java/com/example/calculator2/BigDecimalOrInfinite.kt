@@ -2,6 +2,9 @@ package com.example.calculator2
 
 import java.math.BigDecimal
 
+
+/**
+ * This class serves as an extension of BigDecimal and checks for Infinity*/
 class BigDecimalOrInfinite(input:String?):BigDecimal(input) {
     private var infinite = false
 
@@ -22,7 +25,6 @@ class BigDecimalOrInfinite(input:String?):BigDecimal(input) {
 
 
     override fun toByte(): Byte {
-
         TODO("Not yet implemented")
     }
 
