@@ -7,19 +7,15 @@ import org.junit.Assert.*
 class MainActivityTest {
 
 
+    // TODO: Infinity+-8
 
-
-    // TODO: /0
+    // TODO: (0.0* -> ???
 
     // TODO: (0.*)
-
-    // TODO: 6/(-2)
 
     // TODO: 0/0 = NaN
 
     // TODO: Inf - Inf = NaN, x - Inf = -Inf
-
-    // TODO: reset negative = false on corresponding places (operator or ())
 
     // TODO: handling continous calculating with a negative! result
 
@@ -28,5 +24,7 @@ class MainActivityTest {
     // TODO: calculating with negative numbers 5555555555 + 5555555555 - 1111111111
 
     // TODO: how to handle phone calls during execution?
+
+    // TODO: use AsyncTask! against skipped frames
 
 }

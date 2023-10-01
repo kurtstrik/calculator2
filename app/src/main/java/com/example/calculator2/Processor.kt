@@ -49,126 +49,174 @@ class Processor {
         input.deleteCharAt(input.length - 1)
         val wasOperator:Boolean = (current == '+' || current == '-' || current == '*' || current == '/')
 
-        if (wasOperator && operator && !negative) { // Check conditions after delete.
+        if (wasOperator && operator) { // Check conditions after delete.
             operator = false
+            return
         }
-        else {
-            when(current) {
-                '(' -> if (opened > 0) {
-                    opened--
 
-                    if (input.length >= 2) {
-                        val opcheck2 = input[input.length - 2]
-                        val wasOperator:Boolean = (opcheck2 == '+' || opcheck2 == '-' || opcheck2 == '*' || opcheck2 == '/')
+        // check what was deleted and update corresponding states
+        when(current) {
 
-                        val opcheck1 = input[input.length - 1]
+            '(' -> if (opened > 0) {
+                opened--
 
-                        if (wasOperator && opcheck1 == '-') {
-                            
-                        }
+                if (input.length >= 2) {
+                    val opcheck2 = input[input.length - 2]
+                    val wasOperator2:Boolean = (opcheck2 == '+' || opcheck2 == '-' || opcheck2 == '*' || opcheck2 == '/')
 
-                        if (wasOperator) operator = true
-                    }
+                    val opcheck1 = input[input.length - 1]
+                    val wasOperator1:Boolean = (opcheck1 == '+' || opcheck1 == '-' || opcheck1 == '*' || opcheck1 == '/')
 
-                    if (input.length == 1) {
-                        val opcheck = input[input.length - 1]
-                        if (opcheck == '-') negative = true
+                    if (wasOperator2 && opcheck1 == '-') negative = true  // case:  +-( -> delete
+
+                    if (wasOperator1 && !wasOperator2) operator = true // case: +( -> delete
+
+
+                }
+
+                if (input.length == 1) {
+                    val opcheck = input[input.length - 1]
+                    if (opcheck == '-') negative = true
+                }
+
+            }
+
+            ')' -> if (closed > 0) {
+                closed--
+
+            }
+
+            '.' -> {
+                currentcomma = false
+                --countcomma
+
+                if (countcomma <= 0) allcomma = false
+
+                // Checks the pre-comma value
+
+                val check = false
+                // StringBuilder predecimal = new StringBuilder();
+                val predecimal: Stack<Char?> = Stack()
+
+                for (i in input.length - 1 downTo 0) {
+
+                    val opcheck = input[i]
+                    val nonnumerical:Boolean = (opcheck == '+' || opcheck == '-' || opcheck == '*' || opcheck == '/' || opcheck == '(')
+
+                    if (nonnumerical) break //if(opcheck!=')')
+                    else predecimal.push(opcheck)
+                }
+
+                if (predecimal.size > 1) {
+                    discontinue = false
+                } // pre decimal indexes > 1, zB. "10" / "56" -> further zeros allowed
+
+                else {
+                    if (predecimal.pop() == '0') discontinue = true // unit position is "0" -> further zeros not allowed
+                    else discontinue = false // unit position != "0" -> further zeros allowed
+                }
+            }
+
+            '-' -> {
+
+                val opcheck1 = input[input.length - 1]
+                val wasOperator1:Boolean = (opcheck1 == '+' || opcheck1 == '-' || opcheck1 == '*' || opcheck1 == '/')
+
+                if (input.length >= 2) {
+                    val opcheck2 = input[input.length - 2]
+                    val wasParentheseOpen:Boolean = (opcheck2 == '(')
+
+                    if (wasParentheseOpen) {
+                        operator = false
+                        negative = false
+
                     }
 
                 }
 
-                ')' -> if (closed > 0) {
-                    closed--
-
-                    check if negative or operator
+                if (wasOperator1) {
+                    negative = false
+                    operator = true
+                }
+                else {
+                    negative = false
+                    operator = false
                 }
 
-                '.' -> {
-                    currentcomma = false
-                    --countcomma
+                /*
+                if (input.length == 1) {
+                    val opcheck = input[input.length - 1]
+                    if (opcheck == '-') negative = true
+                }*/
 
-                    if (countcomma <= 0) allcomma = false
+            }
 
-                    // Checks the pre-comma value
+            // Infinity
+            'y' -> {
+                reset()
+                return
+            }
 
-                    val check = false
-                    // StringBuilder predecimal = new StringBuilder();
-                    val predecimal: Stack<Char?> = Stack()
+            '+','/','*' -> {}
 
-                    for (i in input.length - 1 downTo 0) {
+            else -> {
 
+                // TODO: check for operator or negative !!!
+                if (allcomma) {
+                    currentcomma = false // assumption: current expression not a decimal number with comma
+
+                    for (i in input.length - 1 downTo 0) { // check if we have an integer or real number
                         val opcheck = input[i]
                         val nonnumerical:Boolean = (opcheck == '+' || opcheck == '-' || opcheck == '*' || opcheck == '/' || opcheck == '(')
 
-                        if (nonnumerical) break //if(opcheck!=')')
-                        else predecimal.push(opcheck)
-                    }
-
-                    if (predecimal.size > 1) {
-                        discontinue = false
-                    } // pre decimal indexes > 1, zB. "10" / "56" -> further zeros allowed
-
-                    else {
-                        if (predecimal.pop() == '0') discontinue = true // unit position is "0" -> further zeros not allowed
-                        else discontinue = false // unit position != "0" -> further zeros allowed
+                        if (nonnumerical) break // current operand read -> break out of loop
+                        if (opcheck == '.') currentcomma = true
                     }
                 }
-                // TODO: check if - or +- or (/)-
-                '-' -> {
-                    if (negative) {
-                        negative = false
-                        return
-                    }
-                    else {
+
+                // if deletion leads back to an operator index -> operator = true
+                if (input.length >= 2) {
+                    val opcheck2 = input[input.length - 2]
+                    val wasOperator2:Boolean = (opcheck2 == '+' || opcheck2 == '-' || opcheck2 == '*' || opcheck2 == '/')
+                    val wasParentheseOpen:Boolean = (opcheck2 == '(')
+
+                    val opcheck1 = input[input.length - 1]
+                    val wasOperator1:Boolean = (opcheck1 == '+' || opcheck1 == '-' || opcheck1 == '*' || opcheck1 == '/')
+
+                    if (wasOperator2 && opcheck1 == '-') { // case:  +-( -> delete
+                        negative = true
                         operator = false
                     }
 
+                    if (wasOperator1 && !wasOperator2) operator = true // case: +( -> delete
+
+
                 }
 
-                // Infinity
-                'y' -> {
-                    reset()
-                    return
-                }
-
-                else -> {
-
-                    // TODO: check for operator or negative
-                    if (allcomma) {
-                        currentcomma = false // assumption: current expression not a decimal number with comma
-
-                        for (i in input.length - 1 downTo 0) { // check if we have an integer or real number
-                            val opcheck = input[i]
-                            val nonnumerical:Boolean = (opcheck == '+' || opcheck == '-' || opcheck == '*' || opcheck == '/' || opcheck == '(')
-
-                            if (nonnumerical) break // current operand read -> break out of loop
-                            if (opcheck == '.') currentcomma = true
-                        }
-                    }
-
-                    // if deletion leads back to an operator index -> operator = true
-                    if (input.length >= 2) {
-
-
-                        val opcheck = input[input.length - 1]
-                        val wasOperator:Boolean = (opcheck == '+' || opcheck == '-' || opcheck == '*' || opcheck == '/')
-
-                        if (wasOperator) operator = true
+                if (input.length == 1) {
+                    val opcheck = input[input.length - 1]
+                    if (opcheck == '-') negative = true
+                    if (opcheck == '(') {
+                        negative = false
+                        operator = false
                     }
                 }
             }
         }
     }
 
+    /**
+     * Inserts the ( - parenthese into the input with respective checks, updates relevant states.
+     * */
     fun openingP() { // TODO: check for negative
         if (input.length > 0) { // Checks entries before "("
             val current = input[input.length - 1]
-            val openupAllowed:Boolean = (current == '(' || operator)
+            val openupAllowed:Boolean = (current == '(' || operator || negative)
 
             if (openupAllowed) {
                 input.append('(')
                 opened++ // "(" added -> increment
-
+                negative = false
             }
 
         } else { //1st index
@@ -180,7 +228,11 @@ class Processor {
 
         operator = false
     }
-    
+
+
+    /**
+     * Inserts the ) - parenthese into the input with respective checks, updates relevant states.
+     * */
     fun closingP() { //TODO: check for negative
         if (opened > 0 && opened != closed) {
             val current = input[input.length - 1]
@@ -231,6 +283,9 @@ class Processor {
     }
 
     fun inputprocess(number:Char) {
+
+        // TODO: (0.0) -> 0 -> (0.0)0
+        // TODO: (0.)
         if (input.length > 0) {
 
             val current = input[input.length - 1]
@@ -250,6 +305,7 @@ class Processor {
         }
 
         if (!currentcomma) discontinue = false
+
         operator = false
         negative = false
     }
@@ -271,17 +327,17 @@ class Processor {
 
             if (previous != '(') {
                 input.append('+')
-
                 currentcomma = false
                 discontinue = false
-            }
+
+            } else return
         }
         operator = true
         negative = false
     }
 
     fun minus() {
-        // TODO: input after +-------
+        if (negative) return
 
         if (input.length <= 0) {
             input.append('-')
@@ -296,6 +352,7 @@ class Processor {
             if (!negative) {
                 input.append('-')
                 negative = true
+                operator = false
             }
             else return // e.g. +- -> another - input should do nothing
 
@@ -318,7 +375,12 @@ class Processor {
         } else { // number, . , ( , )
             val previous = input[input.length - 1]
 
-            if (previous == '(') return
+            if (previous == '(') {
+                input.append('-')
+                negative = true
+                return
+            }
+
             if (previous == '.') input.append(0)
 
             input.append('-')
@@ -347,6 +409,7 @@ class Processor {
                 currentcomma = false
                 discontinue = false
             }
+            else return
         }
 
         operator = true
@@ -371,6 +434,7 @@ class Processor {
                 currentcomma = false
                 discontinue = false
             }
+            else return
         }
 
         operator = true
