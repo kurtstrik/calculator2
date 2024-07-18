@@ -7,13 +7,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 import kotlin.collections.ArrayList
 import java.util.*
 import kotlin.system.exitProcess
 
 
-//TODO: test with firebase - https://developer.android.com/studio/test/test-in-android-studio
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
   //MutableLiveData?
@@ -93,7 +93,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
   fun click_zero(view: View) {
 
-      // TODO: inputprocess with 0
 
       if (processor.checkTermlength() > 14 ) {
           Toast.makeText(this, R.string.digitlimit, Toast.LENGTH_SHORT).show()
@@ -245,7 +244,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                   negative = true
               }
           }
-          // TODO: set a negative flag
 
            */
           result?.let { result!!.text = (input.toString()) }
@@ -261,7 +259,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
           operator = true
           currentcomma = false
           discontinue = false
-          //negative = false // TODO: what if 2*-(5-3) ???
+          //negative = false //
       }
       return*/
   }
@@ -280,21 +278,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
   fun result(view: View) {
 
-      // TODO: https://en.wikipedia.org/wiki/Shunting_yard_algorithm
-
       val currentinput = processor.getInput()
 
       if (currentinput.length > 0) {
-          if(currentinput[currentinput.length - 1] == '.') processor.addInput("0") // if the last input is an empty "x." -expression -> fill with 0
+          if(currentinput.last() == '.') processor.addInput("0") // if the last input is an empty "x." -expression -> fill with 0
       }
 
       processor.closeup()
-
-      /*
-      while (opened != closed) {
-          processor.addInput(")")
-          closed++
-      }*/
 
       var done = false
 
@@ -344,7 +334,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                       2 -> { // both operands given
                               val op2 = queue.pop()
                               val op1 = queue.pop()
-                              if (isNumeric(op2) && isNumeric(op1)) { // TODO: what if one is notNumeric? or Infinity
+                              if (isNumeric(op2) && isNumeric(op1)) {
                                   operand2 = BigDecimalOrInfinite(op2!!)
                                   operand1 = BigDecimalOrInfinite(op1!!)
                               }
@@ -363,10 +353,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                  queue.push(result.toString())
                              }
                          }
-                  "-" -> { // TODO: implement ∞ handling
+                  "-" -> {
                              if (operand1.isInfinite() && operand2.isInfinite()) queue.push("NaN") // ∞ - ∞
 
-                             if (!operand1.isInfinite() && operand2.isInfinite()) // TODO: x - ∞
+                             if (!operand1.isInfinite() && operand2.isInfinite())
 
                              if (operand1.isInfinite() && !operand2.isInfinite()) queue.push("Infinity") // ∞ - x
 
@@ -375,7 +365,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                  queue.push(result.toString())
                              }
                          }
-                  "*" -> { // TODO: implement ∞ handling
+                  "*" -> {
                              // ∞ × ∞ = ∞
                              //
                              //-∞ × -∞ = ∞
@@ -384,7 +374,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                              if (operand1.isInfinite() && operand2.isInfinite()) queue.push("Infinity") // ∞ * ∞
 
-                             if (!operand1.isInfinite() && operand2.isInfinite()) // TODO: (-)x * ∞
+                             if (!operand1.isInfinite() && operand2.isInfinite())
 
                              if (operand1.isInfinite() && !operand2.isInfinite()) queue.push("Infinity") // ∞ * x
 
@@ -393,7 +383,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                                  queue.push(result.toString())
                              }
                          }
-                  "/" -> { // TODO: implement ∞ handling
+                  "/" -> {
 
                       try {
                             // ∞ ÷ ∞ = NaN
@@ -404,26 +394,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                           if (!operand1.isInfinite() && operand2.isInfinite())  queue.push("0") // x ÷ ∞ = 0
 
-                          if (operand1.isInfinite() && !operand2.isInfinite()) queue.push("Infinity") // TODO: ∞ ÷ (-)x = ∞
+                          if (operand1.isInfinite() && !operand2.isInfinite()) queue.push("Infinity")
 
-                          if (!operand1.isInfinite() && !operand2.isInfinite()) { // TODO: x ÷ (-)y
+                          if (!operand1.isInfinite() && !operand2.isInfinite()) {
                               if (operand2.compareTo(BigDecimal.ZERO)==0) { // division by 0
                                   // 0 ÷ 0
                                   if (operand1.compareTo(BigDecimal.ZERO)==0) queue.push("NaN")
                                   else queue.push("Infinity")
                               }
                               else {
-                                  val result = operand1.divide(operand2)
+
+                                  val result = operand1.divide(operand2, 14, RoundingMode.HALF_UP) // BigDecimal has some specific precision issues here, hence we are rounding
                                   queue.push(result.toString())
                               }
                           }
-
-                          /*
-                          else {
-                              val result = operand1.divide(operand2) // TODO: how to handle 6/(-2)?
-                              queue.push(result.toString())
-                          }
-                          */
                       } catch (e:ArithmeticException) {
                           Toast.makeText(this, "error in calculation!", Toast.LENGTH_SHORT).show()
                           processor.reset()
@@ -654,8 +638,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
       var closed = 0
       val number = java.lang.StringBuilder()
 
-      // TODO: how to process an already negative number?!?
-
       for (i in 0 until raw.length) {
           var current:String = raw[i].toString()
 
@@ -665,15 +647,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                   if (number.length != 0) output.add(number.toString())
 
                   output.add(current)
-                  // operator.add('+');
-                  // tester = '+';
-                  //  opexist = true;
                   number.setLength(0) //reset the operand variable
               }
 
               "(" -> {
 
-                  //TODO: check for - sign
                   var thirdlast = false
 
                   if (i >= 2) {
@@ -713,11 +691,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
               }
 
               else -> {
-                  //TODO: check for - sign
                   var thirdlast = false
 
                   if (i >= 2) {
-                      thirdlast = (raw[i-2] == '+' || raw[i-2] == '-' || raw[i-2] == '*' || raw[i-2] == '/')
+                      thirdlast = (raw[i-2] == '+' || raw[i-2] == '-' || raw[i-2] == '*' || raw[i-2] == '/' || raw[i-2] == '(')
                   }
 
                   var secondlast = false
@@ -727,12 +704,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                   }
 
                   if(thirdlast && secondlast) {
-                      output.removeAt(output.size-1)
-                      current = '-'+current
+                      output.removeAt(output.size-1) // remove last - operator..
+                      current = '-'+current // .. and mark it as negative number
                   }
 
-                  // negative number not adjacent to an operator (e.g. -x or (-y
-                  if(!thirdlast && secondlast) {
+                  // negative number stands in the beginning
+                  if(!thirdlast && secondlast && i <= 1) {
                       output.removeAt(output.size-1)
                       current = '-'+current
                   }
@@ -741,65 +718,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                   number.append(current)
               }
           }
-
-          /*
-          if (current == '-') { TODO
-
-              // is - an operator or a negative sign?
-              if (i > 0) {
-                val wasOperator = (raw[i-1] == '+' || raw[i-1] == '-' || raw[i-1] == '*' || raw[i-1] == '/')
-
-                if (wasOperator) {
-                    negative = true
-
-                }
-                else {
-
-                    negative = false
-                }
-
-
-              }
-
-          }
-
-          if (current == '+' || current == '*' || current == '/') {
-
-
-
-
-              if (number.length != 0)
-                output.add(number.toString())
-
-              output.add(current.toString())
-              // operator.add('+');
-              // tester = '+';
-              //  opexist = true;
-              number.setLength(0) //reset the operand variable
-
-          } else {
-              if (current == '(') {
-                  if (number.length != 0)
-                    output.add(number.toString())
-
-                  output.add(current.toString())
-                  number.setLength(0) //reset the operand variable
-
-                  opened++
-              } else {
-                  if (current == ')') {
-                    ++closed
-                      if (number.length != 0)
-                        output.add(number.toString())
-
-                      output.add(current.toString())
-                      number.setLength(0) //reset the operand variable
-
-                  } else {
-                      number.append(current)
-                  }
-              }
-          }*/
       }
 
       if (number.length != 0) output.add(number.toString()) // add the last number of the input

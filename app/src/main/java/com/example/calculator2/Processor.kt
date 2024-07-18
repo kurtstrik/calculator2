@@ -45,8 +45,9 @@ class Processor {
 
         if (input.length <= 0) return
 
-        val current = input[input.length - 1]
-        input.deleteCharAt(input.length - 1)
+        val current = input.last()
+        input.deleteCharAt(input.lastIndex)
+
         val wasOperator:Boolean = (current == '+' || current == '-' || current == '*' || current == '/')
 
         if (wasOperator && operator) { // Check conditions after delete.
@@ -57,15 +58,25 @@ class Processor {
         // check what was deleted and update corresponding states
         when(current) {
 
-            '(' -> if (opened > 0) {
+            '(' -> {
+                if (opened <= 0) {
+                    return
+                }
                 opened--
+
+                if (input.length == 1) {
+                    val opcheck = input.last()
+                    if (opcheck == '-') negative = true
+                }
 
                 if (input.length >= 2) {
                     val opcheck2 = input[input.length - 2]
-                    val wasOperator2:Boolean = (opcheck2 == '+' || opcheck2 == '-' || opcheck2 == '*' || opcheck2 == '/')
+                    val wasOperator2: Boolean =
+                        (opcheck2 == '+' || opcheck2 == '-' || opcheck2 == '*' || opcheck2 == '/')
 
                     val opcheck1 = input[input.length - 1]
-                    val wasOperator1:Boolean = (opcheck1 == '+' || opcheck1 == '-' || opcheck1 == '*' || opcheck1 == '/')
+                    val wasOperator1: Boolean =
+                        (opcheck1 == '+' || opcheck1 == '-' || opcheck1 == '*' || opcheck1 == '/')
 
                     if (wasOperator2 && opcheck1 == '-') negative = true  // case:  +-( -> delete
 
@@ -74,16 +85,10 @@ class Processor {
 
                 }
 
-                if (input.length == 1) {
-                    val opcheck = input[input.length - 1]
-                    if (opcheck == '-') negative = true
-                }
-
             }
 
             ')' -> if (closed > 0) {
                 closed--
-
             }
 
             '.' -> {
@@ -151,17 +156,17 @@ class Processor {
 
             }
 
-            // Infinity
-            'y' -> {
+            // Infinity or Error or NaN
+            'y', 'r', 'N' -> {
                 reset()
                 return
             }
 
             '+','/','*' -> {}
 
+            //digit or .
             else -> {
 
-                // TODO: check for operator or negative !!!
                 if (allcomma) {
                     currentcomma = false // assumption: current expression not a decimal number with comma
 
@@ -208,7 +213,7 @@ class Processor {
     /**
      * Inserts the ( - parenthese into the input with respective checks, updates relevant states.
      * */
-    fun openingP() { // TODO: check for negative
+    fun openingP() {
         if (input.length > 0) { // Checks entries before "("
             val current = input[input.length - 1]
             val openupAllowed:Boolean = (current == '(' || operator || negative)
@@ -233,7 +238,7 @@ class Processor {
     /**
      * Inserts the ) - parenthese into the input with respective checks, updates relevant states.
      * */
-    fun closingP() { //TODO: check for negative
+    fun closingP() {
         if (opened > 0 && opened != closed) {
             val current = input[input.length - 1]
             val closeAllowed:Boolean = (!operator && current != '(')
@@ -247,11 +252,11 @@ class Processor {
         operator = false
     }
 
-    fun processzero() { // TODO: /0 -> /00
+    fun processzero() {
 
         if (input.length > 0) {
 
-            // TODO: overwriting infinity with 0
+
             if (input.contains("Infinity") && !operator) {
                 reset()
                 input.append('0')
@@ -310,7 +315,7 @@ class Processor {
         negative = false
     }
 
-    fun plus() { // TODO: handling negative
+    fun plus() {
         if (input.length <= 0 || negative) return
 
 
@@ -341,6 +346,7 @@ class Processor {
 
         if (input.length <= 0) {
             input.append('-')
+            negative = true
             return
         }
 
@@ -355,22 +361,6 @@ class Processor {
                 operator = false
             }
             else return // e.g. +- -> another - input should do nothing
-
-            /*
-            when (current) {
-
-                '+','-' -> {
-                    input.deleteCharAt(input.length - 1)
-                    input.append('-')
-                }
-                '*','/' -> {
-                    input.append('-')
-                    negative = true
-                }
-            }
-            // TODO: set a negative flag
-
-             */
 
         } else { // number, . , ( , )
             val previous = input[input.length - 1]
@@ -416,7 +406,7 @@ class Processor {
         negative = false
     }
 
-    fun divide() { // TODO: check with github version
+    fun divide() {
         if (input.length <= 0 || negative) return
 
         if (operator) {
